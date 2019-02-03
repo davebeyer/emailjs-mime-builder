@@ -91,6 +91,13 @@ export default class MimeNode {
      * If true then BCC header is included in RFC2822 message.
      */
     this.includeBccInHeader = options.includeBccInHeader || false
+
+    /**
+     * If true, then the Content-Transfer-Encoding is not applied to
+     * the part when building.  Useful with an outgoing templating module
+     * (e.g., for variable replacements) which will handle encoding.
+     */
+    this.skipContentEncoding = options.skipContentEncoding || false
   }
 
   /**
@@ -400,20 +407,24 @@ export default class MimeNode {
     lines.push('')
 
     if (this.content) {
-      switch (transferEncoding) {
-        case 'quoted-printable':
-          lines.push(quotedPrintableEncode(this.content))
-          break
-        case 'base64':
-          lines.push(base64Encode(this.content, typeof this.content === 'object' ? 'binary' : undefined))
-          break
-        default:
-          if (flowed) {
-            // space stuffing http://tools.ietf.org/html/rfc3676#section-4.2
-            lines.push(foldLines(this.content.replace(/\r?\n/g, '\r\n').replace(/^( |From|>)/igm, ' $1'), 76, true))
-          } else {
-            lines.push(this.content.replace(/\r?\n/g, '\r\n'))
-          }
+      if (this.skipContentEncoding) {
+        lines.push(this.content)
+      } else {
+        switch (transferEncoding) {
+          case 'quoted-printable':
+            lines.push(quotedPrintableEncode(this.content))
+            break
+          case 'base64':
+            lines.push(base64Encode(this.content, typeof this.content === 'object' ? 'binary' : undefined))
+            break
+          default:
+            if (flowed) {
+              // space stuffing http://tools.ietf.org/html/rfc3676#section-4.2
+              lines.push(foldLines(this.content.replace(/\r?\n/g, '\r\n').replace(/^( |From|>)/igm, ' $1'), 76, true))
+            } else {
+              lines.push(this.content.replace(/\r?\n/g, '\r\n'))
+            }
+        }
       }
       if (this.multipart) {
         lines.push('')
