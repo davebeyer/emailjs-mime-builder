@@ -10,7 +10,7 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "./scripts/build.sh",
+    "build": "./scripts/build.sh; exit 0",
     "release": "./scripts/release.sh",
     "lint": "$(npm bin)/standard",
     "test": "npm run lint && npm run unit",
