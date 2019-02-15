@@ -10,6 +10,9 @@ import {
 } from 'emailjs-mime-codec'
 import { toASCII } from 'punycode'
 
+// export const boundaryTag = '----sinikael-?=_'
+export const boundaryTag = '----groupvine_v2-'
+
 /**
  * If needed, mime encodes the name part
  *
@@ -159,7 +162,7 @@ export function normalizeHeaderKey (key = '') {
  * @return {String} boundary value
  */
 export function generateBoundary (nodeId, baseBoundary) {
-  return '----sinikael-?=_' + nodeId + '-' + baseBoundary
+  return boundaryTag + nodeId + '-' + baseBoundary
 }
 
 /**

@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 
 import Mimebuilder from './builder'
+import { boundaryTag } from './utils'
 
 describe('Mimebuilder', function () {
   it('should create Mimebuilder object', function () {
@@ -208,17 +209,17 @@ describe('Mimebuilder', function () {
           'message-id': '67890'
         })
 
-      const expected = 'Content-Type: multipart/mixed; boundary="----sinikael-?=_1-test"\r\n' +
+      const expected = 'Content-Type: multipart/mixed; boundary="' + boundaryTag + '1-test"\r\n' +
         'Date: 12345\r\n' +
         'Message-Id: <67890>\r\n' +
         'MIME-Version: 1.0\r\n' +
         '\r\n' +
-        '------sinikael-?=_1-test\r\n' +
+        '--' + boundaryTag + '1-test\r\n' +
         'Content-Type: text/plain\r\n' +
         'Content-Transfer-Encoding: 7bit\r\n' +
         '\r\n' +
         'Hello world!\r\n' +
-        '------sinikael-?=_1-test--\r\n'
+        '--' + boundaryTag + '1-test--\r\n'
 
       mb.createChild('text/plain').setContent('Hello world!')
 

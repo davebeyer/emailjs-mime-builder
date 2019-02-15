@@ -8,7 +8,8 @@ import {
   escapeHeaderArgument,
   encodeHeaderValue,
   buildHeaderValue,
-  isPlainText
+  isPlainText,
+  boundaryTag
 } from './utils'
 
 describe('#convertAddresses', function () {
@@ -75,7 +76,7 @@ describe('generateBoundary ', function () {
   it('should genereate boundary string', function () {
     const nodeId = 'abc'
     const rootBoundary = 'def'
-    expect(generateBoundary(nodeId, rootBoundary)).to.equal('----sinikael-?=_abc-def')
+    expect(generateBoundary(nodeId, rootBoundary)).to.equal(boundaryTag + 'abc-def')
   })
 })
 
