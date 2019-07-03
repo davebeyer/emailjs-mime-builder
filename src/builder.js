@@ -341,7 +341,7 @@ export default class MimeNode {
       switch (header.key) {
         case 'Content-Disposition':
           structured = parseHeaderValue(value)
-          if (this.filename) {
+          if (this.filename /* consider: && structured.value === 'attachment' */) {
             structured.params.filename = this.filename
           }
           value = buildHeaderValue(structured)
